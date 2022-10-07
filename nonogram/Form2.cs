@@ -12,16 +12,20 @@ namespace nonogram
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        Form form1 = new Form1();
+
+        public Form2(string text, Form1 f1)
         {
             InitializeComponent();
+            form1 = f1;
+            string name_file = text;
+            StreamReader f = new StreamReader(name_file);
+            Init(f);
         }
 
-        //переменные и постоянные
         const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
         bool flag, flag_H = false, flag_V = false, color = true;
         string s;
-        StreamReader f = new StreamReader("oak.txt");
         int col, row, max_left, max_up, row_up, col_left, mode, act;
         int x_start, y_start, col_time = 0, row_time = 0;
         int[,] answer, nonogram;
@@ -33,8 +37,7 @@ namespace nonogram
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
 
-
-        private void Form2_Load(object sender, EventArgs e)
+        private void Init(StreamReader f)
         {
             int c = 0;
             button1.BackColor = Color.FromArgb(255, 20, 40, 65);
@@ -47,7 +50,7 @@ namespace nonogram
             while ((s = f.ReadLine()) != null)
             {
                 test = s.Split(' ').Select(int.Parse).ToArray();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < col; i++)
                 {
                     nonogram[c, i] = test[i];
                 }
@@ -57,9 +60,8 @@ namespace nonogram
 
             counter(nonogram);
 
-            this.Height = 2 * y0 + size_block * (row + row_up + 1) + 3 * line_big_block;
-            this.Width = 2 * x0 + size_block * (col + col_left) + 3 * line_big_block;
-            
+            this.Width = 2*x0 + (col_left + col) * size_block + 6 + 15;
+            this.Height = 2*y0 + (row_up + row) * size_block + 6 + 45;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -135,10 +137,21 @@ namespace nonogram
 
         private void Form2_MouseDown(object sender, MouseEventArgs e)
         {
-            flag = true;
-            flag_H = false;
-            flag_V = false;
-            x_y_mouse(e);
+            if(e.Button == MouseButtons.Middle)
+            {
+                color = !color;
+                if (color)
+                    button1.BackColor = Color.FromArgb(255, 20, 40, 65);
+                else
+                    button1.BackColor = Color.White;
+            }
+            if(e.Button == MouseButtons.Left)
+            {
+                flag = true;
+                flag_H = false;
+                flag_V = false;
+                x_y_mouse(e);
+            }
         }
 
         private void Form2_MouseMove_1(object sender, MouseEventArgs e)
@@ -156,7 +169,7 @@ namespace nonogram
                 row_time = row_mouse;
                 col_time = col_mouse;
 
-                if ((row_mouse >= 0 && row_mouse <= 9) && (col_mouse >= 0 && col_mouse <= 9))
+                if ((row_mouse >= 0 && row_mouse <= row - 1) && (col_mouse >= 0 && col_mouse <= col - 1))
                 {
                     if (color && answer[row_mouse, col_mouse] == 0) //mode 0
                     {
@@ -205,7 +218,7 @@ namespace nonogram
                 if ((col_time != col_mouse) && (!flag_V))
                     flag_H = true;
 
-                if ((flag_V) && (row_mouse >= 0 && row_mouse <= 9) && (col_time >= 0 && col_time <= 9))
+                if ((flag_V) && (row_mouse >= 0 && row_mouse <= row - 1) && (col_time >= 0 && col_time <= col - 1))
                 {
                     switch (mode)
                     {
@@ -221,13 +234,17 @@ namespace nonogram
                         case 3:
                             act = 0;
                             break;
+                        case 4:
+                            act = 2;
+                            break;
+
                     }
                         
                     redraw(row_mouse, col_time, act, priority);
                     
                 }
 
-                if ((flag_H) && (row_time >= 0 && row_time <= 9) && (col_mouse >= 0 && col_mouse <= 9))
+                if ((flag_H) && (row_time >= 0 && row_time <= row - 1) && (col_mouse >= 0 && col_mouse <= col - 1))
                 {
                     switch (mode)
                     {
@@ -242,6 +259,9 @@ namespace nonogram
                             break;
                         case 3:
                             act = 0;
+                            break;
+                        case 4:
+                            act = 2;
                             break;
                     }
                     redraw(row_time, col_mouse, act, priority);
@@ -296,12 +316,13 @@ namespace nonogram
                     int y1 = y_start + size_block * i + 1;
                     g.DrawLine(black, x1, y1, x2 + 1, y1);
                 }
+            cross(answer, row_r, col_r);
             check(answer, row_r, col_r);
-        }//частичная отрисовка
+        }
 
         private void counter(int[,] patern)
         {
-            int count, cursor;
+            int count;
             left = new int[row][];
             up = new int[col][];
             List<int> temporary = new List<int> { };
@@ -370,30 +391,117 @@ namespace nonogram
             formGraphics.DrawString(drawString, drawFont, drawBrush, x + coef_x, y + coef_y, drawFormat);
         }
 
-        private void check(int[,] answer, int x, int y)
+        private void check(int[,] patern, int row, int col)
         {
             bool check = true;
-            for (int i = 0; i < row; i++)
+
+            if (patern[row, col] != nonogram[row, col])
+                check = false;
+
+            for (int i = 0; i < this.row; i++)
             {
                 if (!check)
                     break;
-                for (int j = 0; j < col; j++)
+                for (int j = 0; j < this.col; j++)
                 {
-                   if ((answer[i,j] == 1) && (answer[i,j] != nonogram[i, j]))
+                   if ((patern[i,j] == 1) && (patern[i,j] != nonogram[i, j]))
                     {
                         check = false;
                         break;
                     }
-                   if (((answer[i, j] == 0) || (answer[i, j] == 2)) && (nonogram[i,j] != 0))
+                   if (((patern[i, j] == 0) || (patern[i, j] == 2)) && (nonogram[i,j] != 0))
                     {
                         check = false;
                         break;
                     }
                 }
             }
-                
+
             if (check)
-                textBox1.Text = "Победа";
+                MessageBox.Show("Победа");
+        }
+
+        private void cross(int[,] patern, int row, int col)
+        {
+            List<int> temporary = new List<int> { };
+            Boolean cross_flag_H = false, cross_flag_V = false;
+            int count = 0;
+
+            for (int i = 0; i < this.col; i++)
+            {
+                if (patern[row, i] == 1)
+                    count++;
+                if (patern[row, i] == 0 && count > 0)
+                {
+                    temporary.Add(count);
+                    count = 0;
+                }
+                if ((i == this.col - 1) && (count != 0))
+                    temporary.Add(count);
+            }
+            
+            if (left[row].Length == temporary.Count)
+            {
+                cross_flag_H = true;
+                for (int i = 0; i < left[row].Length; i++)
+                {
+                    if (left[row][i] != temporary[i])
+                        cross_flag_H = false;
+                }
+            }
+
+            if (cross_flag_H)
+            {
+                for (int i = 0; i < this.col; i++)
+                {
+                    if (patern[row,i] == 0)
+                    {
+                        redraw(row, i, 2, false);
+                    }
+                }
+            }
+
+            count = 0;
+            temporary.Clear();
+            for (int i = 0; i < this.row; i++)
+            {
+                if (patern[i, col] == 1)
+                    count++;
+                if (patern[i,col] == 0 && count > 0)
+                {
+                    temporary.Add(count);
+                    count = 0;
+                }
+                if ((i == this.row - 1) && (count > 0))
+                    temporary.Add(count);
+            }
+
+            if (up[col].Length == temporary.Count)
+            {
+                cross_flag_V = true;
+                for (int i = 0; i < up[col].Length; i++)
+                {
+                    if (up[col][i] != temporary[i])
+                        cross_flag_V = false;
+                }
+            }
+
+            if (cross_flag_V)
+            {
+                for (int i = 0; i < this.row; i++)
+                {
+                    if (patern[i, col] == 0)
+                    {
+                        redraw(i, col, 2, false);
+                    }
+                }
+            }
+
+        }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            form1.Visible = true;
         }
     }
 

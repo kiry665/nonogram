@@ -2,6 +2,7 @@ namespace nonogram
 {
     public partial class Form1 : Form
     {
+        //public List<string> txt = new List<string> {"oak.txt"};
         public Form1()
         {
             InitializeComponent();
@@ -9,8 +10,19 @@ namespace nonogram
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form2 f = new Form2();
-            f.ShowDialog();
+            Random rnd = new Random();
+            DirectoryInfo d = new DirectoryInfo("easy");
+            FileInfo[] f = d.GetFiles("*.txt");
+
+            List<string> files = new List<string> { };
+            foreach(FileInfo file in f)
+            {
+                files.Add(file.Name);
+            }
+
+            Form2 form2 = new Form2("easy/" + files[rnd.Next(0,files.Count)], this);
+            form2.Show();
+            this.Visible = false;
         }
     }
 }
