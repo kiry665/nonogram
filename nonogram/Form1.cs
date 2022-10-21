@@ -6,6 +6,7 @@ namespace nonogram
         public Form1()
         {
             InitializeComponent();
+            //bpvtytybt
         }
 
         private void button1_Click(object sender, EventArgs e)

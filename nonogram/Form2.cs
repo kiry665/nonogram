@@ -24,7 +24,7 @@ namespace nonogram
         }
 
         const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
-        bool flag, flag_H = false, flag_V = false, color = true;
+        bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
         string s;
         int col, row, max_left, max_up, row_up, col_left, mode, act;
         int x_start, y_start, col_time = 0, row_time = 0;
@@ -148,6 +148,7 @@ namespace nonogram
             if(e.Button == MouseButtons.Left)
             {
                 flag = true;
+                flag_move_mouse = true;
                 flag_H = false;
                 flag_V = false;
                 x_y_mouse(e);
@@ -156,7 +157,8 @@ namespace nonogram
 
         private void Form2_MouseMove_1(object sender, MouseEventArgs e)
         {
-            x_y_mouse(e);
+            //if (flag_move_mouse)
+                x_y_mouse(e);
         }
 
         private void x_y_mouse(MouseEventArgs e)
@@ -168,10 +170,10 @@ namespace nonogram
                 int row_mouse = (e.Y - y_start) / size_block;
                 row_time = row_mouse;
                 col_time = col_mouse;
-
+                act = 3;
                 if ((row_mouse >= 0 && row_mouse <= row - 1) && (col_mouse >= 0 && col_mouse <= col - 1))
                 {
-                    if (color && answer[row_mouse, col_mouse] == 0) //mode 0
+                    if (color && answer[row_mouse, col_mouse] == 0)
                     {
                         act = 1;
                         mode = 0;
@@ -201,12 +203,12 @@ namespace nonogram
                         mode = 4;
                         priority = true;
                     }
-
+                    if (act != 3)
                         redraw(row_mouse, col_mouse, act, priority);
                     flag = false;
                 }
             }
-
+            
             if ((e.Button == MouseButtons.Left) && (!flag))
             {
                 int col_mouse = (e.X - x_start) / size_block;
@@ -431,7 +433,7 @@ namespace nonogram
             {
                 if (patern[row, i] == 1)
                     count++;
-                if (patern[row, i] == 0 && count > 0)
+                if (patern[row, i] != 1 && count > 0)
                 {
                     temporary.Add(count);
                     count = 0;
@@ -456,6 +458,7 @@ namespace nonogram
                 {
                     if (patern[row,i] == 0)
                     {
+                        flag_H = false;
                         redraw(row, i, 2, false);
                     }
                 }
@@ -467,12 +470,12 @@ namespace nonogram
             {
                 if (patern[i, col] == 1)
                     count++;
-                if (patern[i,col] == 0 && count > 0)
+                if (patern[i, col] != 1 && count > 0)
                 {
                     temporary.Add(count);
                     count = 0;
                 }
-                if ((i == this.row - 1) && (count > 0))
+                if ((i == this.row - 1) && (count != 0))
                     temporary.Add(count);
             }
 
@@ -492,6 +495,7 @@ namespace nonogram
                 {
                     if (patern[i, col] == 0)
                     {
+                        flag_V = false;
                         redraw(i, col, 2, false);
                     }
                 }
