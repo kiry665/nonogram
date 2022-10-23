@@ -26,7 +26,7 @@ namespace nonogram
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
 
-        public Form2(Form1 f1, int row, int col, int[,] nonogram)
+        public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level)
         {
             InitializeComponent();
             form1 = f1;
@@ -37,6 +37,8 @@ namespace nonogram
             counter(nonogram);
             this.Width = 2 * x0 + (col_left + col) * size_block + 6 + 15;
             this.Height = 2 * y0 + (row_up + row) * size_block + 6 + 45;
+            this.Text = "Level " + number_level;
+            button1.BackColor = Color.FromArgb(255, 20, 40, 65);
         }
 
         private void button1_Click(object sender, EventArgs e)

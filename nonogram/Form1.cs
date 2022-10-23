@@ -1,24 +1,39 @@
 using System.Windows.Forms;
 using System.Data.SQLite;
+using Microsoft.VisualBasic.ApplicationServices;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+
 namespace nonogram
 {
     public partial class Form1 : Form
     {
+        int row = 0, col = 0, number_level = 0;
+        int[,] patern = new int[1, 1];
+
         public Form1()
         {
             InitializeComponent();
+            numericUpDown1.Maximum = SQL_Count();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int row = 0, col = 0;
-            int[,] patern = new int[1,1]; 
+            SQL_Levels();
+
+            Form2 form2 = new Form2(this, row, col, patern, number_level);
+            form2.Show();
+            this.Visible = false;
+        }
+
+        private void SQL_Levels()
+        {
             try
             {
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
+                    number_level = Convert.ToInt32(numericUpDown1.Value);
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = 1", connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())   // построчно считываем данные
@@ -45,10 +60,25 @@ namespace nonogram
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
 
-            Form2 form2 = new Form2(this, row, col, patern);
-            form2.Show();
-            this.Visible = false;
+        private int SQL_Count()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM Levels;", connection);
+                    object count = cmd.ExecuteScalar();
+
+                    return (Convert.ToInt32(count));
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
 
         
