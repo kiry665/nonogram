@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ImHP/gP9YFtHfZW9ObcLNwiKJuOdbOLD9p6DH+z8eo+2WbsN3S8nlPcVT2B8RapPCt7OwTZRXaJaiGill/+0lQ==",
+  "dgSpecHash": "W5hyQHfC/1YpYqml+DSudPwEYy+2L3lyfwxX2RORzHdUzWNwvowoiQGxK3SJf36L+7cslxCwxkvwtrSKDF+CYA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\WinFormsApp1.csproj",
+  "projectFilePath": "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\WinFormsApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\novok\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\novok\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

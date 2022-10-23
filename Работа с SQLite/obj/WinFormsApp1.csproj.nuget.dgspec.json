@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\WinFormsApp1.csproj": {}
+    "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\WinFormsApp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\WinFormsApp1.csproj": {
+    "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\WinFormsApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\WinFormsApp1.csproj",
+        "projectUniqueName": "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\WinFormsApp1.csproj",
         "projectName": "WinFormsApp1",
-        "projectPath": "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\WinFormsApp1.csproj",
+        "projectPath": "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\WinFormsApp1.csproj",
         "packagesPath": "C:\\Users\\novok\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\novok\\Desktop\\test\\WinFormsApp1\\obj\\",
+        "outputPath": "C:\\Users\\novok\\Documents\\GitHub\\nonogram\\Работа с SQLite\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\novok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -64,7 +64,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

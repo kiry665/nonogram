@@ -13,23 +13,12 @@ namespace nonogram
     public partial class Form2 : Form
     {
         Form form1 = new Form1();
-
-        public Form2(string text, Form1 f1)
-        {
-            InitializeComponent();
-            form1 = f1;
-            string name_file = text;
-            StreamReader f = new StreamReader(name_file);
-            Init(f);
-        }
-
         const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
-        string s;
         int col, row, max_left, max_up, row_up, col_left, mode, act;
         int x_start, y_start, col_time = 0, row_time = 0;
         int[,] answer, nonogram;
-        int[][] left,up;
+        int[][] left, up;
         Pen black = new Pen(Color.FromArgb(255, 0, 0, 0), line_big_block);
         Pen gray = new Pen(Color.FromArgb(255, 192, 196, 207), line_small_block);
         Pen blue = new Pen(Color.FromArgb(255, 20, 40, 65), line_small_block);
@@ -37,31 +26,17 @@ namespace nonogram
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
 
-        private void Init(StreamReader f)
+        public Form2(Form1 f1, int row, int col, int[,] nonogram)
         {
-            int c = 0;
-            button1.BackColor = Color.FromArgb(255, 20, 40, 65);
-            //читаем построчно файл с "картинкой"
-            s = f.ReadLine();
-            int[]? test = s.Split(' ').Select(int.Parse).ToArray();
-            row = test[0]; col = test[1];
-            nonogram = new int[row, col];
+            InitializeComponent();
+            form1 = f1;
+            this.nonogram = nonogram;
             answer = new int[row, col];
-            while ((s = f.ReadLine()) != null)
-            {
-                test = s.Split(' ').Select(int.Parse).ToArray();
-                for (int i = 0; i < col; i++)
-                {
-                    nonogram[c, i] = test[i];
-                }
-                c++;
-            }
-            f.Close();
-
+            this.row = row;
+            this.col = col;
             counter(nonogram);
-
-            this.Width = 2*x0 + (col_left + col) * size_block + 6 + 15;
-            this.Height = 2*y0 + (row_up + row) * size_block + 6 + 45;
+            this.Width = 2 * x0 + (col_left + col) * size_block + 6 + 15;
+            this.Height = 2 * y0 + (row_up + row) * size_block + 6 + 45;
         }
 
         private void button1_Click(object sender, EventArgs e)
