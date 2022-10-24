@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+п»їusing System.Windows.Forms;
 using System.Data.SQLite;
 using Microsoft.VisualBasic.ApplicationServices;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
@@ -14,6 +14,8 @@ namespace nonogram
         {
             InitializeComponent();
             numericUpDown1.Maximum = SQL_Count();
+            number_level = Convert.ToInt32(numericUpDown1.Value);
+            Check_Label();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -23,6 +25,32 @@ namespace nonogram
             Form2 form2 = new Form2(this, row, col, patern, number_level);
             form2.Show();
             this.Visible = false;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            number_level = Convert.ToInt32(numericUpDown1.Value);
+            Check_Label();
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            number_level = Convert.ToInt32(numericUpDown1.Value);
+            Check_Label();
+        }
+
+        private void Check_Label()
+        {
+            if (SQL_Passed(number_level))
+            {
+                label2.Text = "вњ“";
+                label2.ForeColor = Color.Green;
+            }
+            else
+            {
+                label2.Text = "X";
+                label2.ForeColor = Color.Red;
+            }
         }
 
         private void SQL_Levels()
@@ -36,7 +64,7 @@ namespace nonogram
                     SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())   // построчно считываем данные
+                        while (reader.Read())   // РїРѕСЃС‚СЂРѕС‡РЅРѕ СЃС‡РёС‚С‹РІР°РµРј РґР°РЅРЅС‹Рµ
                         {
                             var s = reader.GetValue(1);
                             row = reader.GetInt32(2);
@@ -61,7 +89,7 @@ namespace nonogram
                 MessageBox.Show(ex.ToString());
             }
         }
-
+        
         private int SQL_Count()
         {
             try
@@ -71,7 +99,6 @@ namespace nonogram
                     connection.Open();
                     SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM Levels;", connection);
                     object count = cmd.ExecuteScalar();
-
                     return (Convert.ToInt32(count));
                 }
             }
@@ -80,6 +107,25 @@ namespace nonogram
                 return 0;
             }
         }
+
+        private bool SQL_Passed(int num)
+        {
+            try
+            {
+                using(var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT Passed FROM Levels WHERE Number_Level = " + num, connection);
+                    object pass = cmd.ExecuteScalar();
+                    return (Convert.ToBoolean(pass));
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
+        }   
 
         
     }

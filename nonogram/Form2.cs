@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace nonogram
         Form form1 = new Form1();
         const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
-        int col, row, max_left, max_up, row_up, col_left, mode, act;
+        int col, row, max_left, max_up, row_up, col_left, mode, act, number_level;
         int x_start, y_start, col_time = 0, row_time = 0;
         int[,] answer, nonogram;
         int[][] left, up;
@@ -34,6 +35,7 @@ namespace nonogram
             answer = new int[row, col];
             this.row = row;
             this.col = col;
+            this.number_level = number_level;
             counter(nonogram);
             this.Width = 2 * x0 + (col_left + col) * size_block + 6 + 15;
             this.Height = 2 * y0 + (row_up + row) * size_block + 6 + 45;
@@ -397,7 +399,11 @@ namespace nonogram
             }
 
             if (check)
+            {
                 MessageBox.Show("Победа");
+                SQL_Change_Passed();
+            }
+                
         }
 
         private void cross(int[,] patern, int row, int col)
@@ -484,7 +490,25 @@ namespace nonogram
         {
             form1.Visible = true;
         }
+
+        private void SQL_Change_Passed()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Levels SET Passed = 1 WHERE Number_Level = " + number_level, connection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
     }
 
-
+    
 }
