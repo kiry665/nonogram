@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.switch1 = new nonogram.Controls.Switch();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -81,12 +82,23 @@
             this.label2.Size = new System.Drawing.Size(0, 25);
             this.label2.TabIndex = 4;
             // 
+            // switch1
+            // 
+            this.switch1.BackColor = System.Drawing.Color.White;
+            this.switch1.Checked = false;
+            this.switch1.Location = new System.Drawing.Point(262, 162);
+            this.switch1.Name = "switch1";
+            this.switch1.Size = new System.Drawing.Size(52, 22);
+            this.switch1.TabIndex = 5;
+            this.switch1.Text = "switch1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(277, 160);
+            this.ClientSize = new System.Drawing.Size(382, 249);
+            this.Controls.Add(this.switch1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -107,5 +119,6 @@
         private Label label1;
         private Button button1;
         private Label label2;
+        private Controls.Switch switch1;
     }
 }
