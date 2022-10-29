@@ -7,9 +7,10 @@ namespace nonogram
 {
     public partial class Form1 : Form
     {
+        #region Переменные
         int row = 0, col = 0, number_level = 0;
         int[,] patern = new int[1, 1];
-
+        #endregion
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +26,18 @@ namespace nonogram
             Form2 form2 = new Form2(this, row, col, patern, number_level);
             form2.Show();
             this.Visible = false;
+        }
+                
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.KeyCode == Keys.Z && e.Alt)
+            {
+                Form3 form3 = new Form3(this);
+                form3.Show();
+                this.Visible = false;
+                e.Handled = true;
+            }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -53,6 +66,7 @@ namespace nonogram
             }
         }
 
+        #region SQL
         private void SQL_Levels()
         {
             try
@@ -89,7 +103,7 @@ namespace nonogram
                 MessageBox.Show(ex.ToString());
             }
         }
-        
+
         private int SQL_Count()
         {
             try
@@ -107,7 +121,6 @@ namespace nonogram
                 return 0;
             }
         }
-
         private bool SQL_Passed(int num)
         {
             try
@@ -125,8 +138,8 @@ namespace nonogram
                 MessageBox.Show(ex.ToString());
                 return false;
             }
-        }   
+        }
+        #endregion
 
-        
     }
 }

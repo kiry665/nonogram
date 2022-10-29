@@ -9,34 +9,30 @@ namespace nonogram.Controls
 {
     public class Switch : Control
     {
-        Rectangle rect = new Rectangle();
+        Rectangle rect;
+        
         int TogglePosX_ON;
         int TogglePosX_OFF;
         public bool Checked { get; set; } = false;
+         
         public Switch()
         {
             Size = new Size(40, 15);
-            BackColor = Color.White;
             rect = new Rectangle(0, 0, Width - 1, Height - 1);
             TogglePosX_OFF = rect.X;
-            TogglePosX_ON = rect.Width - rect.Height;
+            TogglePosX_ON = rect.X + rect.Width - rect.Height;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
             Graphics g = e.Graphics;
-            g.Clear(Parent.BackColor);
 
-            Pen pen_contur = new Pen(Color.Gray, 1);
-
-            Rectangle rect = new Rectangle(0, 0, Width - 1, Height - 1);
-            Rectangle rectToggle = new Rectangle(0, 0, Height - 1, Height - 1);
-            GraphicsPath rectGP = RoundedRect(rect, rect.Height);
-
-            g.FillPath(new SolidBrush(BackColor), rectGP);
-            g.DrawPath(pen_contur, rectGP);
+            Pen contour = new Pen(Color.Gray);
+            
+            //Rectangle rect = new Rectangle(0, 0, Width - 1, Height - 1);
+            GraphicsPath rectGP = RoundedRectangle(rect, rect.Height);
+            Rectangle rectToggle = new Rectangle(0, 0, rect.Height, rect.Height);
 
             if (Checked)
             {
@@ -49,32 +45,27 @@ namespace nonogram.Controls
                 g.FillEllipse(new SolidBrush(Color.White), rectToggle);
             }
 
-            g.DrawEllipse(pen_contur, rectToggle);
+            g.DrawEllipse(contour, rectToggle);
+            g.DrawPath(contour, rectGP);
         }
 
-        private GraphicsPath RoundedRect(Rectangle rect, int RoundSize)
+        private GraphicsPath RoundedRectangle(Rectangle rect, int RoundedSize)
         {
-            GraphicsPath path = new GraphicsPath();
+            GraphicsPath gp = new GraphicsPath();
 
-            path.AddArc(rect.X, rect.Y, RoundSize, RoundSize, 180, 90);
-            path.AddArc(rect.X + rect.Width - RoundSize, rect.Y, RoundSize, RoundSize, 270, 90);
-            path.AddArc(rect.X + rect.Width - RoundSize, rect.Y + rect.Height - RoundSize, RoundSize, RoundSize, 0, 90);
-            path.AddArc(rect.X, rect.Y + rect.Height - RoundSize, RoundSize, RoundSize, 90, 90);
+            gp.AddArc(rect.X, rect.Y, RoundedSize, RoundedSize, 180, 90);
+            gp.AddArc(rect.X + rect.Width - RoundedSize, rect.Y, RoundedSize, RoundedSize, 270, 90);
+            gp.AddArc(rect.X + rect.Width - RoundedSize, rect.Y + rect.Height - RoundedSize, RoundedSize, RoundedSize, 0, 90);
+            gp.AddArc(rect.X, rect.Y + rect.Height - RoundedSize, RoundedSize, RoundedSize, 90, 90);
 
-            path.CloseFigure();
+            gp.CloseFigure();
 
-            return path;
+            return gp;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-
-            SwitchToggle();
-        }
-
-        private void SwitchToggle()
-        {
             Checked = !Checked;
 
             Invalidate();

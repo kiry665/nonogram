@@ -13,6 +13,7 @@ namespace nonogram
 {
     public partial class Form2 : Form
     {
+        #region Переменные
         Form form1 = new Form1();
         const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
@@ -26,7 +27,7 @@ namespace nonogram
         Pen light_blue_pen = new Pen(Color.FromArgb(255, 20, 40, 65), 4);
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
-
+        #endregion
         public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level)
         {
             InitializeComponent();
@@ -41,6 +42,7 @@ namespace nonogram
             this.Height = 2 * y0 + (row_up + row) * size_block + 6 + 45;
             this.Text = "Level " + number_level;
             button1.BackColor = Color.FromArgb(255, 20, 40, 65);
+            switch1.Checked = SQL_Settings_GET();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -112,7 +114,7 @@ namespace nonogram
                     g.DrawLine(black, x1, y1, x2 + 1, y1);
                 }
 
-        }//полная отрисовка 
+        } 
 
         private void Form2_MouseDown(object sender, MouseEventArgs e)
         {
@@ -142,48 +144,54 @@ namespace nonogram
 
         private void x_y_mouse(MouseEventArgs e)
         {
-            bool priority = false;
             if ((e.Button == MouseButtons.Left) && (flag))
             {
                 int col_mouse = (e.X - x_start) / size_block;
                 int row_mouse = (e.Y - y_start) / size_block;
                 row_time = row_mouse;
                 col_time = col_mouse;
-                act = 3;
+                
                 if ((row_mouse >= 0 && row_mouse <= row - 1) && (col_mouse >= 0 && col_mouse <= col - 1))
                 {
-                    if (color && answer[row_mouse, col_mouse] == 0)
+                    act = 3;
+                    if (color)
                     {
-                        act = 1;
-                        mode = 0;
-                    } 
-                    else 
-                    if (color && answer[row_mouse, col_mouse] == 1) // mode 1
-                    {
-                        act = 0;
-                        mode = 1;
-                    }  
-                    
-                    if (!color && answer[row_mouse, col_mouse] == 0) // mode 2
-                    {
-                        act = 2;
-                        mode = 2;
-                    } 
-                    else
-                    if (!color && answer[row_mouse, col_mouse] == 2)// mode 3
-                    {
-                        act = 0;
-                        mode = 3;
+                        switch (answer[row_mouse, col_mouse])
+                        {
+                            case 0:
+                                act = 1;
+                                mode = 0;
+                                break;
+                            case 1:
+                                act = 0;
+                                mode = 1;
+                                break;
+                            case 2:
+                                act = 1;
+                                mode = 2;
+                                break;
+                        }
                     }
-                    else 
-                    if (!color && answer[row_mouse, col_mouse] == 1)
+                    else
                     {
-                        act = 2;
-                        mode = 4;
-                        priority = true;
+                        switch (answer[row_mouse, col_mouse])
+                        {
+                            case 0:
+                                act = 2;
+                                mode = 0;
+                                break;
+                            case 1:
+                                act = 2;
+                                mode = 1;
+                                break;
+                            case 2:
+                                act = 0;
+                                mode = 2;
+                                break;
+                        }
                     }
                     if (act != 3)
-                        redraw(row_mouse, col_mouse, act, priority);
+                        redraw(row_mouse, col_mouse, act);
                     flag = false;
                 }
             }
@@ -198,80 +206,45 @@ namespace nonogram
 
                 if ((col_time != col_mouse) && (!flag_V))
                     flag_H = true;
-
+                
                 if ((flag_V) && (row_mouse >= 0 && row_mouse <= row - 1) && (col_time >= 0 && col_time <= col - 1))
                 {
-                    switch (mode)
-                    {
-                        case 0:
-                            act = 1;
-                            break;
-                        case 1:
-                            act = 0;
-                            break;
-                        case 2:
-                            act = 2;
-                            break;
-                        case 3:
-                            act = 0;
-                            break;
-                        case 4:
-                            act = 2;
-                            break;
-
-                    }
-                        
-                    redraw(row_mouse, col_time, act, priority);
-                    
+                    if (answer[row_mouse, col_time] == mode)
+                        redraw(row_mouse, col_time, act);
+                    else
+                        flag_V = false;
                 }
 
                 if ((flag_H) && (row_time >= 0 && row_time <= row - 1) && (col_mouse >= 0 && col_mouse <= col - 1))
                 {
-                    switch (mode)
-                    {
-                        case 0:
-                            act = 1;
-                            break;
-                        case 1:
-                            act = 0;
-                            break;
-                        case 2:
-                            act = 2;
-                            break;
-                        case 3:
-                            act = 0;
-                            break;
-                        case 4:
-                            act = 2;
-                            break;
-                    }
-                    redraw(row_time, col_mouse, act, priority);
+                    if (answer[row_time, col_mouse] == mode)
+                        redraw(row_time, col_mouse, act);
                     
                 }
             }
         } 
 
-        private void redraw(int row_r, int col_r, int act, bool priority)
+        private void redraw(int row_r, int col_r, int act)
         {
             Graphics g = CreateGraphics();
             int x = x_start + size_block * col_r;
             int y = y_start + size_block * row_r;
 
-            if ((act == 0) && (answer[row_r, col_r] != act))
+            if (act == 0)
             {
                 g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
                 g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
                 answer[row_r, col_r] = act;
             }
 
-            if ((act == 1) && (answer[row_r, col_r] != act))
+            if (act == 1)
             {
                 g.FillRectangle(light_blue, x + 1, y + 1, size_block - 1, size_block - 1);
                 g.DrawRectangle(blue, x + 1, y + 1, size_block - 1, size_block - 1);
                 answer[row_r, col_r] = act;
             }
 
-            if ((act == 2) && (answer[row_r, col_r] != act) && ((answer[row_r,col_r] != 1) || priority))
+            if (act == 2)
             {
                 g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
                 g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
@@ -297,7 +270,11 @@ namespace nonogram
                     int y1 = y_start + size_block * i + 1;
                     g.DrawLine(black, x1, y1, x2 + 1, y1);
                 }
-            cross(answer, row_r, col_r);
+
+            if (switch1.Checked)
+            {
+                cross(answer, row_r, col_r);
+            }
             check(answer, row_r, col_r);
         }
 
@@ -442,7 +419,7 @@ namespace nonogram
                     if (patern[row,i] == 0)
                     {
                         flag_H = false;
-                        redraw(row, i, 2, false);
+                        redraw(row, i, 2);
                     }
                 }
             }
@@ -479,7 +456,7 @@ namespace nonogram
                     if (patern[i, col] == 0)
                     {
                         flag_V = false;
-                        redraw(i, col, 2, false);
+                        redraw(i, col, 2);
                     }
                 }
             }
@@ -489,8 +466,10 @@ namespace nonogram
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             form1.Visible = true;
+            SQL_Settinge_SET();
         }
 
+        #region SQl
         private void SQL_Change_Passed()
         {
             try
@@ -508,7 +487,41 @@ namespace nonogram
             }
         }
 
-    }
+        private bool SQL_Settings_GET()
+        {
+            try
+            {
+                using(var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT Autocross FROM Settings WHERE Key == 1", connection);
+                    object autocross = cmd.ExecuteScalar();
+                    return (Convert.ToBoolean(autocross));
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+        
+        private void SQL_Settinge_SET()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Autocross = " + switch1.Checked + " WHERE Key == 1 ", connection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
 
-    
+            }
+        }
+        #endregion
+    }
 }
