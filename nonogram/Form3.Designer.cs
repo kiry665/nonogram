@@ -29,23 +29,117 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.button3 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(344, 16);
+            this.button1.BackColor = System.Drawing.Color.OrangeRed;
+            this.button1.Location = new System.Drawing.Point(592, 11);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(102, 34);
+            this.button1.Size = new System.Drawing.Size(129, 34);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Запись";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Text = "Запись в БД";
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(158, 14);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(27, 31);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.Text = "10";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(98, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(54, 25);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Ряды";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(191, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(82, 25);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Колонки";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(279, 14);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(27, 31);
+            this.textBox2.TabIndex = 4;
+            this.textBox2.Text = "10";
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.button2.Location = new System.Drawing.Point(344, 12);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(112, 34);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Создать";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(40, 15);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(52, 31);
+            this.numericUpDown1.TabIndex = 6;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button3.Location = new System.Drawing.Point(462, 12);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(124, 34);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Посмотреть";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1288, 601);
+            this.ClientSize = new System.Drawing.Size(1160, 66);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form3";
             this.Text = "Form3";
@@ -53,12 +147,21 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form3_Paint);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form2_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form2_MouseMove_1);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private Button button1;
+        private TextBox textBox1;
+        private Label label1;
+        private Label label2;
+        private TextBox textBox2;
+        private Button button2;
+        private NumericUpDown numericUpDown1;
+        private Button button3;
     }
 }

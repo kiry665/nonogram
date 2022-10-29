@@ -16,14 +16,11 @@ namespace nonogram
     public partial class Form3 : Form
     {
         const int x0 = 60, y0 = 60, size_block = 50, line_big_block = 2, line_small_block = 1;
-        int x_start, y_start, row = 10, col = 10;
+        int x_start, y_start, row = 0, col = 0;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false;
         Form1 form1 = new Form1();
         int mode, act, row_time, col_time;
         int[,] answer;
-
-        
-
         Pen black = new Pen(Color.FromArgb(255, 0, 0, 0), line_big_block);
         Pen gray = new Pen(Color.FromArgb(255, 192, 196, 207), line_small_block);
         Pen blue = new Pen(Color.FromArgb(255, 20, 40, 65), line_small_block);
@@ -33,10 +30,8 @@ namespace nonogram
         public Form3(Form1 f1)
         {
             InitializeComponent();
-            answer = new int[row,col];
             form1 = f1;
-            this.Width = 2 * x0 + col * size_block;
-            this.Height = 3 * y0 + row * size_block;
+            numericUpDown1.Maximum = SQL_Count();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -55,6 +50,33 @@ namespace nonogram
             MessageBox.Show(s);
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            row = Convert.ToInt32(textBox1.Text);
+            col = Convert.ToInt32(textBox2.Text);
+            answer = new int[row, col];
+            this.Width = 2 * x0 + col * size_block;
+            this.Height = 3 * y0 + row * size_block;
+
+            Graphics g = this.CreateGraphics();
+            g.Clear(Color.White);
+
+            Invalidate();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SQL_Levels();
+            textBox1.Text = row.ToString();
+            textBox2.Text = col.ToString();
+            this.Width = 2 * x0 + col * size_block;
+            this.Height = 3 * y0 + row * size_block;
+            Graphics g = this.CreateGraphics();
+            g.Clear(Color.White);
+
+            Invalidate();
+        }
+
         private void Form3_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -68,6 +90,8 @@ namespace nonogram
                     int x = x_start + size_block * j;
                     int y = y_start + size_block * i;
                     g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
+                    if (answer[i, j] == 1)
+                        redraw(i, j, 1);
                 }
 
             for (int i = 1; i < col; i++) //жирные вертикальные линии
@@ -215,13 +239,68 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Levels(Array) Values(\"" + s + "\")", connection);
+                    SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Levels(Array, Row, Column) Values(\"" + s + "\", " + row + ", " + col + ")", connection);
                     cmd.ExecuteNonQuery();
                 }
             }
             catch
             {
 
+            }
+        }
+
+        private int SQL_Count()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM Levels;", connection);
+                    object count = cmd.ExecuteScalar();
+                    return (Convert.ToInt32(count));
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private void SQL_Levels()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    int number_level = Convert.ToInt32(numericUpDown1.Value);
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = " + number_level, connection);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())   // построчно считываем данные
+                        {
+                            var s = reader.GetValue(1);
+                            row = reader.GetInt32(2);
+                            col = reader.GetInt32(3);
+                            answer = new int[row, col];
+                            string[] words = s.ToString().Split(';');
+
+                            for (int i = 0; i < row; i++)
+                            {
+                                string[] symbols = words[i].Split(',');
+                                for (int j = 0; j < col; j++)
+                                {
+                                    answer[i, j] = Convert.ToInt32(symbols[j]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
     }
