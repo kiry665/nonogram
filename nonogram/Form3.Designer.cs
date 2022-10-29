@@ -36,15 +36,17 @@
             this.button2 = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.OrangeRed;
-            this.button1.Location = new System.Drawing.Point(592, 11);
+            this.button1.Location = new System.Drawing.Point(558, 11);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 34);
+            this.button1.Size = new System.Drawing.Size(127, 33);
             this.button1.TabIndex = 0;
             this.button1.Text = "Запись в БД";
             this.button1.UseVisualStyleBackColor = false;
@@ -52,16 +54,18 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(158, 14);
+            this.textBox1.Location = new System.Drawing.Point(136, 14);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(27, 31);
+            this.textBox1.Size = new System.Drawing.Size(30, 31);
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = "10";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(98, 17);
+            this.label1.Location = new System.Drawing.Point(78, 15);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 25);
             this.label1.TabIndex = 2;
@@ -70,7 +74,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(191, 17);
+            this.label2.Location = new System.Drawing.Point(170, 14);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 25);
             this.label2.TabIndex = 3;
@@ -78,18 +83,20 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(279, 14);
+            this.textBox2.Location = new System.Drawing.Point(256, 11);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(27, 31);
+            this.textBox2.Size = new System.Drawing.Size(30, 31);
             this.textBox2.TabIndex = 4;
             this.textBox2.Text = "10";
             // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button2.Location = new System.Drawing.Point(344, 12);
+            this.button2.Location = new System.Drawing.Point(329, 11);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 34);
+            this.button2.Size = new System.Drawing.Size(100, 33);
             this.button2.TabIndex = 5;
             this.button2.Text = "Создать";
             this.button2.UseVisualStyleBackColor = false;
@@ -97,7 +104,8 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(40, 15);
+            this.numericUpDown1.Location = new System.Drawing.Point(24, 15);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             12,
             0,
@@ -109,7 +117,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(52, 31);
+            this.numericUpDown1.Size = new System.Drawing.Size(50, 31);
             this.numericUpDown1.TabIndex = 6;
             this.numericUpDown1.Value = new decimal(new int[] {
             1,
@@ -120,19 +128,33 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button3.Location = new System.Drawing.Point(462, 12);
+            this.button3.Location = new System.Drawing.Point(433, 10);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(124, 34);
+            this.button3.Size = new System.Drawing.Size(121, 33);
             this.button3.TabIndex = 7;
             this.button3.Text = "Посмотреть";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.OrangeRed;
+            this.button4.Location = new System.Drawing.Point(689, 11);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(173, 33);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "Перезапись в БД";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1160, 66);
+            this.ClientSize = new System.Drawing.Size(872, 279);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.button2);
@@ -141,6 +163,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form3";
             this.Text = "Form3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form3_FormClosing);
@@ -163,5 +186,6 @@
         private Button button2;
         private NumericUpDown numericUpDown1;
         private Button button3;
+        private Button button4;
     }
 }

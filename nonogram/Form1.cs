@@ -15,6 +15,7 @@ namespace nonogram
         {
             InitializeComponent();
             numericUpDown1.Maximum = SQL_Count();
+            numericUpDown1.Value = SQL_LastLevel_GET();
             number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
@@ -64,6 +65,11 @@ namespace nonogram
                 label2.Text = "X";
                 label2.ForeColor = Color.Red;
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SQL_LastLevel_SET();
         }
 
         #region SQL
@@ -137,6 +143,41 @@ namespace nonogram
             {
                 MessageBox.Show(ex.ToString());
                 return false;
+            }
+        }
+
+        private int SQL_LastLevel_GET()
+        {
+            try
+            {
+                using(var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT Last_Level FROM Settings WHERE KEY = 1", connection);
+                    object last_level = cmd.ExecuteScalar();
+                    return Convert.ToInt32(last_level);
+                }
+            }
+            catch
+            {
+                return 1;
+            }
+        }
+
+        private void SQL_LastLevel_SET()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Last_Level =" + numericUpDown1.Value, connection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+
             }
         }
         #endregion

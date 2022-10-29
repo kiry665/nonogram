@@ -33,21 +33,49 @@ namespace nonogram
             form1 = f1;
             numericUpDown1.Maximum = SQL_Count();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Вы точно хотите внести изменения?", "Внесение изменений в БД", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                string s = "";
+                for (int i = 0; i < row; i++)
+                {
+                    for (int j = 0; j < col; j++)
+                    {
+                        s += answer[i, j].ToString();
+                        if (j != col - 1)
+                            s += ",";
+                    }
+                    s += ";";
+                }
+                SQL_UPDATE(s);
+                MessageBox.Show(s);
+                
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            string s = "";
-            for (int i = 0; i < row; i++)
+            DialogResult dr = MessageBox.Show("Вы точно хотите внести изменения?", "Внесение изменений в БД", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
             {
-                for (int j = 0; j < col; j++)
+                string s = "";
+                for (int i = 0; i < row; i++)
                 {
-                    s += answer[i, j].ToString();
-                    if (j != col - 1)
-                        s += ",";
+                    for (int j = 0; j < col; j++)
+                    {
+                        s += answer[i, j].ToString();
+                        if (j != col - 1)
+                            s += ",";
+                    }
+                    s += ";";
                 }
-                s += ";";
+                SQL_INSERT(s);
+                MessageBox.Show(s);
+                numericUpDown1.Maximum = SQL_Count();
             }
-            SQL_INSERT(s);
-            MessageBox.Show(s);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -55,7 +83,7 @@ namespace nonogram
             row = Convert.ToInt32(textBox1.Text);
             col = Convert.ToInt32(textBox2.Text);
             answer = new int[row, col];
-            this.Width = 2 * x0 + col * size_block;
+            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
             this.Height = 3 * y0 + row * size_block;
 
             Graphics g = this.CreateGraphics();
@@ -69,7 +97,7 @@ namespace nonogram
             SQL_Levels();
             textBox1.Text = row.ToString();
             textBox2.Text = col.ToString();
-            this.Width = 2 * x0 + col * size_block;
+            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
             this.Height = 3 * y0 + row * size_block;
             Graphics g = this.CreateGraphics();
             g.Clear(Color.White);
@@ -301,6 +329,23 @@ namespace nonogram
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void SQL_UPDATE(string s)
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Levels SET Array = \"" + s + "\", Row = " + row + ", Column = " + col + " WHERE Number_Level = " + numericUpDown1.Value, connection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+
             }
         }
     }
