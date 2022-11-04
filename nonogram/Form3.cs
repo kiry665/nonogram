@@ -56,6 +56,19 @@ namespace nonogram
             }
         }
 
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            SQL_Levels();
+            textBox1.Text = row.ToString();
+            textBox2.Text = col.ToString();
+            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
+            this.Height = 3 * y0 + row * size_block;
+            Graphics g = this.CreateGraphics();
+            g.Clear(Color.White);
+
+            Invalidate();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show("Вы точно хотите внести изменения?", "Внесение изменений в БД", MessageBoxButtons.YesNo);

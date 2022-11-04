@@ -38,11 +38,14 @@ namespace nonogram
             this.col = col;
             this.number_level = number_level;
             counter(nonogram);
-            this.Width = 2 * x0 + (col_left + col) * size_block + 6 + 15;
-            this.Height = 2 * y0 + (row_up + row) * size_block + 6 + 45;
-            this.Text = "Level " + number_level;
+            this.ClientSize = new System.Drawing.Size(2 * x0 + (col_left + col) * size_block, 2 * y0 + (row_up + row) * size_block);
+            this.Text = "Уровень " + number_level;
             button1.BackColor = Color.FromArgb(255, 20, 40, 65);
             switch1.Checked = SQL_Settings_GET();
+            button1.Size = new Size(50, 50);
+            switch1.Size = new Size(50, 20);
+            button1.Location = new Point(x0, y0);
+            switch1.Location = new Point(x0, y0 + 54);
         }
 
         private void button1_Click(object sender, EventArgs e)

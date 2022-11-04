@@ -34,8 +34,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(2, 1);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Location = new System.Drawing.Point(10, 11);
+            this.button1.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(50, 50);
             this.button1.TabIndex = 1;
@@ -45,10 +45,10 @@
             // switch1
             // 
             this.switch1.Checked = false;
-            this.switch1.Location = new System.Drawing.Point(2, 55);
-            this.switch1.Margin = new System.Windows.Forms.Padding(2);
+            this.switch1.Location = new System.Drawing.Point(10, 68);
+            this.switch1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.switch1.Name = "switch1";
-            this.switch1.Size = new System.Drawing.Size(40, 15);
+            this.switch1.Size = new System.Drawing.Size(50, 20);
             this.switch1.TabIndex = 2;
             this.switch1.Text = "switch1";
             // 
@@ -56,11 +56,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(396, 259);
+            this.ClientSize = new System.Drawing.Size(396, 258);
             this.Controls.Add(this.switch1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form2";

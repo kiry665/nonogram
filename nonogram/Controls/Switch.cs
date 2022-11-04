@@ -17,12 +17,20 @@ namespace nonogram.Controls
          
         public Switch()
         {
-            Size = new Size(40, 15);
+            Size = new Size(50, 20);
             rect = new Rectangle(0, 0, Width - 1, Height - 1);
             TogglePosX_OFF = rect.X;
             TogglePosX_ON = rect.X + rect.Width - rect.Height;
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            rect = new Rectangle(0, 0, Width - 1, Height - 1);
+            TogglePosX_OFF = rect.X;
+            TogglePosX_ON = rect.X + rect.Width - rect.Height;
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -30,7 +38,6 @@ namespace nonogram.Controls
 
             Pen contour = new Pen(Color.Gray);
             
-            //Rectangle rect = new Rectangle(0, 0, Width - 1, Height - 1);
             GraphicsPath rectGP = RoundedRectangle(rect, rect.Height);
             Rectangle rectToggle = new Rectangle(0, 0, rect.Height, rect.Height);
 
