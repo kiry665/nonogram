@@ -21,6 +21,7 @@ namespace nonogram
         int x_start, y_start, col_time = 0, row_time = 0;
         int[,] answer, nonogram;
         int[][] left, up;
+        string difficult = "";
         Pen black = new Pen(Color.FromArgb(255, 0, 0, 0), line_big_block);
         Pen gray = new Pen(Color.FromArgb(255, 192, 196, 207), line_small_block);
         Pen blue = new Pen(Color.FromArgb(255, 20, 40, 65), line_small_block);
@@ -28,7 +29,7 @@ namespace nonogram
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
         #endregion
-        public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level)
+        public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level, string difficult)
         {
             InitializeComponent();
             form1 = f1;
@@ -46,6 +47,7 @@ namespace nonogram
             switch1.Size = new Size(50, 20);
             button1.Location = new Point(x0, y0);
             switch1.Location = new Point(x0, y0 + 54);
+            this.difficult = difficult;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -480,7 +482,7 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Levels SET Passed = 1 WHERE Number_Level = " + number_level, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE " + difficult + " SET Passed = 1 WHERE Number_Level = " + number_level, connection);
                     cmd.ExecuteNonQuery();
                 }
             }

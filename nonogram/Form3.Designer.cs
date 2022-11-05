@@ -37,6 +37,7 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -150,11 +151,23 @@
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // domainUpDown1
+            // 
+            this.domainUpDown1.Items.Add("Easy");
+            this.domainUpDown1.Items.Add("Medium");
+            this.domainUpDown1.Location = new System.Drawing.Point(881, 11);
+            this.domainUpDown1.Name = "domainUpDown1";
+            this.domainUpDown1.Size = new System.Drawing.Size(180, 31);
+            this.domainUpDown1.TabIndex = 9;
+            this.domainUpDown1.Text = "domainUpDown1";
+            this.domainUpDown1.SelectedItemChanged += new System.EventHandler(this.domainUpDown1_SelectedItemChanged);
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 279);
+            this.ClientSize = new System.Drawing.Size(1167, 279);
+            this.Controls.Add(this.domainUpDown1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.numericUpDown1);
@@ -188,5 +201,6 @@
         private NumericUpDown numericUpDown1;
         private Button button3;
         private Button button4;
+        private DomainUpDown domainUpDown1;
     }
 }

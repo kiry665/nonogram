@@ -10,12 +10,26 @@ namespace nonogram
         #region Переменные
         int row = 0, col = 0, number_level = 0;
         int[,] patern = new int[1, 1];
+        string difficult = "";
         #endregion
         public Form1()
         {
             InitializeComponent();
+            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult"));
+            switch (domainUpDown1.Text)
+            {
+                case "Легкий":
+                    difficult = "Easy";
+                    break;
+                case "Средний":
+                    difficult = "Medium";
+                    break;
+                case "Сложный":
+                    difficult = "Hard";
+                    break;
+            }
             numericUpDown1.Maximum = SQL_Count();
-            numericUpDown1.Value = SQL_LastLevel_GET();
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult));
             number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
@@ -24,11 +38,16 @@ namespace nonogram
         {
             SQL_Levels();
 
-            Form2 form2 = new Form2(this, row, col, patern, number_level);
+            Form2 form2 = new Form2(this, row, col, patern, number_level, difficult);
             form2.Show();
             this.Visible = false;
         }
-                
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+           
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -47,6 +66,27 @@ namespace nonogram
             Check_Label();
         }
 
+        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
+        {
+            SQL_SET();
+            switch (domainUpDown1.Text)
+            {
+                case "Легкий":
+                    difficult = "Easy";
+                    break;
+                case "Средний":
+                    difficult = "Medium";
+                    break;
+                case "Сложный":
+                    difficult = "Hard";
+                    break;
+            }
+            numericUpDown1.Maximum = SQL_Count();
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult));
+            number_level = Convert.ToInt32(numericUpDown1.Value);
+            Check_Label();
+        }
+
         private void Form1_Activated(object sender, EventArgs e)
         {
             number_level = Convert.ToInt32(numericUpDown1.Value);
@@ -55,7 +95,8 @@ namespace nonogram
 
         private void Check_Label()
         {
-            if (SQL_Passed(number_level))
+            
+            if (SQL_Passed(difficult, number_level))
             {
                 label2.Text = "✓";
                 label2.ForeColor = Color.Green;
@@ -69,7 +110,7 @@ namespace nonogram
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SQL_LastLevel_SET();
+            SQL_SET();
         }
 
         #region SQL
@@ -81,7 +122,7 @@ namespace nonogram
                 {
                     number_level = Convert.ToInt32(numericUpDown1.Value);
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = " + number_level, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + difficult + " WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())   // построчно считываем данные
@@ -109,7 +150,6 @@ namespace nonogram
                 MessageBox.Show(ex.ToString());
             }
         }
-
         private int SQL_Count()
         {
             try
@@ -117,7 +157,7 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM Levels;", connection);
+                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM " + difficult, connection);
                     object count = cmd.ExecuteScalar();
                     return (Convert.ToInt32(count));
                 }
@@ -127,14 +167,14 @@ namespace nonogram
                 return 0;
             }
         }
-        private bool SQL_Passed(int num)
+        private bool SQL_Passed(string table, int num)
         {
             try
             {
                 using(var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT Passed FROM Levels WHERE Number_Level = " + num, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT Passed FROM " + table + " WHERE Number_Level = " + num, connection);
                     object pass = cmd.ExecuteScalar();
                     return (Convert.ToBoolean(pass));
                 }
@@ -146,32 +186,34 @@ namespace nonogram
             }
         }
 
-        private int SQL_LastLevel_GET()
-        {
-            try
-            {
-                using(var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
-                {
-                    connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT Last_Level FROM Settings WHERE KEY = 1", connection);
-                    object last_level = cmd.ExecuteScalar();
-                    return Convert.ToInt32(last_level);
-                }
-            }
-            catch
-            {
-                return 1;
-            }
-        }
+        
 
-        private void SQL_LastLevel_SET()
+        private object SQL_GET(string cell)
         {
             try
             {
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Last_Level =" + numericUpDown1.Value, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT " + cell + " FROM Settings WHERE KEY = 1", connection);
+                    object last_level = cmd.ExecuteScalar();
+                    return last_level;
+                }
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private void SQL_SET()
+        {
+            try
+            {
+                using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
+                {
+                    connection.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Last_" + difficult + " =" + numericUpDown1.Value, connection);
                     cmd.ExecuteNonQuery();
                 }
             }

@@ -32,3 +32,4 @@ C:\Users\novok\Documents\GitHub\nonogram\nonogram\bin\Debug\net6.0-windows\runti
 C:\Users\novok\Documents\GitHub\nonogram\nonogram\bin\Debug\net6.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\novok\Documents\GitHub\nonogram\nonogram\obj\Debug\net6.0-windows\nonogram.csproj.CopyComplete
 C:\Users\novok\Documents\GitHub\nonogram\nonogram\obj\Debug\net6.0-windows\nonogram.Form3.resources
+C:\Users\novok\Documents\GitHub\nonogram\nonogram\obj\Debug\net6.0-windows\nonogram.Properties.Resources.resources

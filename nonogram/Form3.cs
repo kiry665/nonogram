@@ -31,6 +31,7 @@ namespace nonogram
         {
             InitializeComponent();
             form1 = f1;
+            domainUpDown1.SelectedIndex = 0;
             numericUpDown1.Maximum = SQL_Count();
         }
 
@@ -61,12 +62,17 @@ namespace nonogram
             SQL_Levels();
             textBox1.Text = row.ToString();
             textBox2.Text = col.ToString();
-            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
+            this.Width = (2 * x0 + col * size_block < 1000) ? 1000 : 2 * x0 + col * size_block;
             this.Height = 3 * y0 + row * size_block;
             Graphics g = this.CreateGraphics();
             g.Clear(Color.White);
 
             Invalidate();
+        }
+
+        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
+        {
+            numericUpDown1.Maximum = SQL_Count();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -96,7 +102,7 @@ namespace nonogram
             row = Convert.ToInt32(textBox1.Text);
             col = Convert.ToInt32(textBox2.Text);
             answer = new int[row, col];
-            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
+            this.Width = (2 * x0 + col * size_block < 1000) ? 1000 : 2 * x0 + col * size_block;
             this.Height = 3 * y0 + row * size_block;
 
             Graphics g = this.CreateGraphics();
@@ -110,7 +116,7 @@ namespace nonogram
             SQL_Levels();
             textBox1.Text = row.ToString();
             textBox2.Text = col.ToString();
-            this.Width = (2 * x0 + col * size_block < 650) ? 650 : 2 * x0 + col * size_block;
+            this.Width = (2 * x0 + col * size_block < 1000) ? 1000 : 2 * x0 + col * size_block;
             this.Height = 3 * y0 + row * size_block;
             Graphics g = this.CreateGraphics();
             g.Clear(Color.White);
@@ -280,7 +286,7 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Levels(Array, Row, Column) Values(\"" + s + "\", " + row + ", " + col + ")", connection);
+                    SQLiteCommand cmd = new SQLiteCommand("INSERT INTO "+ domainUpDown1.Text +"(Array, Row, Column) Values(\"" + s + "\", " + row + ", " + col + ")", connection);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -297,7 +303,7 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM Levels;", connection);
+                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM " + domainUpDown1.Text, connection);
                     object count = cmd.ExecuteScalar();
                     return (Convert.ToInt32(count));
                 }
@@ -316,7 +322,7 @@ namespace nonogram
                 {
                     int number_level = Convert.ToInt32(numericUpDown1.Value);
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Levels WHERE Number_Level = " + number_level, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + domainUpDown1.Text + " WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())   // построчно считываем данные
@@ -352,7 +358,7 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Levels SET Array = \"" + s + "\", Row = " + row + ", Column = " + col + " WHERE Number_Level = " + numericUpDown1.Value, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE " + domainUpDown1.Text + " SET Array = \"" + s + "\", Row = " + row + ", Column = " + col + " WHERE Number_Level = " + numericUpDown1.Value, connection);
                     cmd.ExecuteNonQuery();
                 }
             }
