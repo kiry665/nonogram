@@ -123,7 +123,7 @@ namespace nonogram
 
         private void Form2_MouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Middle)
+            if((e.Button == MouseButtons.Middle) || (e.Button == MouseButtons.Right))
             {
                 color = !color;
                 if (color)
