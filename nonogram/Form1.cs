@@ -10,45 +10,37 @@ namespace nonogram
         #region Переменные
         int row = 0, col = 0, number_level = 0;
         int[,] patern = new int[1, 1];
-        string difficult = "";
+        List<string> difficult = new List<string>
+        {
+            "Easy", "Medium"
+        };
+        List<string> difficult_RU = new List<string>
+        {
+            "Легкий", "Средний"
+        };
         #endregion
+
         public Form1()
         {
             InitializeComponent();
-            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult"));
-            switch (domainUpDown1.Text)
-            {
-                case "Легкий":
-                    difficult = "Easy";
-                    break;
-                case "Средний":
-                    difficult = "Medium";
-                    break;
-                case "Сложный":
-                    difficult = "Hard";
-                    break;
-            }
-            numericUpDown1.Maximum = SQL_Count();
-            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult));
-            number_level = Convert.ToInt32(numericUpDown1.Value);
+            domainUpDown1.Items.AddRange(difficult_RU); // добавляем названия сложностей
+            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult")); //получаем из БД последний уровень сложности
+            numericUpDown1.Maximum = SQL_Count(); //ограничение по кол-ву уровней
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));// последний номер уровня из БД по сложности
+            //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) // открытие формы для игры
         {
-            SQL_Levels();
+            SQL_Levels(); // получение массива игры и его характеристик
 
-            Form2 form2 = new Form2(this, row, col, patern, number_level, difficult);
+            Form2 form2 = new Form2(this, row, col, patern, Convert.ToInt32(numericUpDown1.Value), difficult[domainUpDown1.SelectedIndex]);
             form2.Show();
             this.Visible = false;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e) 
         {
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Z && e.Alt)
@@ -62,41 +54,30 @@ namespace nonogram
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            number_level = Convert.ToInt32(numericUpDown1.Value);
+            //number_level = Convert.ToInt32(numericUpDown1.Value);
+            SQL_SET();
             Check_Label();
         }
 
         private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
         {
-            SQL_SET();
-            switch (domainUpDown1.Text)
-            {
-                case "Легкий":
-                    difficult = "Easy";
-                    break;
-                case "Средний":
-                    difficult = "Medium";
-                    break;
-                case "Сложный":
-                    difficult = "Hard";
-                    break;
-            }
+            //SQL_SET();
             numericUpDown1.Maximum = SQL_Count();
-            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult));
-            number_level = Convert.ToInt32(numericUpDown1.Value);
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));
+            //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            number_level = Convert.ToInt32(numericUpDown1.Value);
+            //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
         private void Check_Label()
         {
             
-            if (SQL_Passed(difficult, number_level))
+            if (SQL_Passed(difficult[domainUpDown1.SelectedIndex], number_level))
             {
                 label2.Text = "✓";
                 label2.ForeColor = Color.Green;
@@ -122,7 +103,7 @@ namespace nonogram
                 {
                     number_level = Convert.ToInt32(numericUpDown1.Value);
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + difficult + " WHERE Number_Level = " + number_level, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + difficult[domainUpDown1.SelectedIndex] + " WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())   // построчно считываем данные
@@ -157,12 +138,12 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM " + difficult, connection);
+                    SQLiteCommand cmd = new SQLiteCommand(@"SELECT COUNT(*) FROM " + difficult[domainUpDown1.SelectedIndex], connection);
                     object count = cmd.ExecuteScalar();
                     return (Convert.ToInt32(count));
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return 0;
             }
@@ -213,7 +194,9 @@ namespace nonogram
                 using (var connection = new SQLiteConnection(@"Data Source = db.sqlite"))
                 {
                     connection.Open();
-                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Last_" + difficult + " =" + numericUpDown1.Value, connection);
+                    SQLiteCommand cmd = new SQLiteCommand("UPDATE Settings SET Last_" + difficult[domainUpDown1.SelectedIndex] + " =" + numericUpDown1.Value, connection);
+                    cmd.ExecuteNonQuery();
+                    cmd = new SQLiteCommand("UPDATE Settings SET Last_difficult = " + domainUpDown1.SelectedIndex, connection);
                     cmd.ExecuteNonQuery();
                 }
             }

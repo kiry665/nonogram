@@ -32,7 +32,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -90,22 +89,8 @@
             this.label2.Size = new System.Drawing.Size(0, 38);
             this.label2.TabIndex = 3;
             // 
-            // button2
-            // 
-            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(387, 197);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(41, 42);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "⚙\r\n";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // domainUpDown1
             // 
-            this.domainUpDown1.Items.Add("Легкий");
-            this.domainUpDown1.Items.Add("Средний");
             this.domainUpDown1.Location = new System.Drawing.Point(127, 193);
             this.domainUpDown1.Name = "domainUpDown1";
             this.domainUpDown1.Size = new System.Drawing.Size(180, 31);
@@ -119,7 +104,6 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(433, 242);
             this.Controls.Add(this.domainUpDown1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.button1);
@@ -143,7 +127,6 @@
         private Button button1;
         private NumericUpDown numericUpDown1;
         private Label label2;
-        private Button button2;
         private DomainUpDown domainUpDown1;
     }
 }
