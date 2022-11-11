@@ -18,29 +18,28 @@ namespace nonogram
         {
             "Легкий", "Средний"
         };
-        #endregion
+        #endregion                                                                                             //блок переменных
 
         public Form1()
         {
             InitializeComponent();
-            domainUpDown1.Items.AddRange(difficult_RU); // добавляем названия сложностей
-            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult")); //получаем из БД последний уровень сложности
-            numericUpDown1.Maximum = SQL_Count(); //ограничение по кол-ву уровней
-            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));// последний номер уровня из БД по сложности
-            //number_level = Convert.ToInt32(numericUpDown1.Value);
+            domainUpDown1.Items.AddRange(difficult_RU);                                                        //наполнение DomainUpDown
+            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult"));                          //отображение уровня сложности
+            numericUpDown1.Maximum = SQL_Count();                                                              //ограничение максимального кол-ва уровней
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex])); //отображение уровня сложности
             Check_Label();
         }
 
-        private void button1_Click(object sender, EventArgs e) // открытие формы для игры
+        private void button1_Click(object sender, EventArgs e)
         {
-            SQL_Levels(); // получение массива игры и его характеристик
+            SQL_Levels();
 
             Form2 form2 = new Form2(this, row, col, patern, Convert.ToInt32(numericUpDown1.Value), difficult[domainUpDown1.SelectedIndex]);
-            form2.Show();
-            this.Visible = false;
+            form2.Show();                                                                                      // отображение form2
+            this.Visible = false;                                                                              // отключение видимости form1
         }
 
-        protected override void OnKeyDown(KeyEventArgs e) 
+        protected override void OnKeyDown(KeyEventArgs e)                                                      // событие нажатия кнопок на клавиатуре
         {
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Z && e.Alt)
@@ -52,31 +51,31 @@ namespace nonogram
             }
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)                                   //событие изменения значения numericUpDown1
         {
-            //number_level = Convert.ToInt32(numericUpDown1.Value);
+                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             SQL_SET();
             Check_Label();
         }
 
-        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
+        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)                             //событие изменения значения domainUpDown1
         {
-            //SQL_SET();
+                                                                                                               //SQL_SET();
             numericUpDown1.Maximum = SQL_Count();
             numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));
-            //number_level = Convert.ToInt32(numericUpDown1.Value);
+                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object sender, EventArgs e)                                               //событие активации form1
         {
-            //number_level = Convert.ToInt32(numericUpDown1.Value);
+                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
-        private void Check_Label()
+        private void Check_Label()                                                                             // событие отображение информации в label1 с проверкой
         {
-            
+
             if (SQL_Passed(difficult[domainUpDown1.SelectedIndex], number_level))
             {
                 label2.Text = "✓";
@@ -89,7 +88,7 @@ namespace nonogram
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)                                  //событие закрытия form1
         {
             SQL_SET();
         }
@@ -106,7 +105,7 @@ namespace nonogram
                     SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + difficult[domainUpDown1.SelectedIndex] + " WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())   // построчно считываем данные
+                        while (reader.Read())                                                                  // построчно считываем данные
                         {
                             var s = reader.GetValue(1);
                             row = reader.GetInt32(2);
@@ -167,8 +166,6 @@ namespace nonogram
             }
         }
 
-        
-
         private object SQL_GET(string cell)
         {
             try
@@ -205,7 +202,7 @@ namespace nonogram
 
             }
         }
-        #endregion
+        #endregion                                                                                             // блок SQL запросов для БД
 
     }
 }
