@@ -15,9 +15,9 @@ namespace nonogram
     {
         #region Переменные
         Form form1 = new Form1();
-        const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1, size_block = 50;
+        const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
-        int col, row, max_left, max_up, row_up, col_left, mode, act, number_level;
+        int col, row, max_left, max_up, row_up, col_left, mode, act, number_level, size_block = 40;
         int x_start, y_start, col_time = 0, row_time = 0;
         int[,] answer, nonogram;
         int[][] left, up;
@@ -31,6 +31,10 @@ namespace nonogram
         #endregion
         public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level, string difficult)
         {
+            if(difficult == "Easy")
+            {
+                size_block = 50;
+            }
             InitializeComponent();
             form1 = f1;
             this.nonogram = nonogram;
@@ -64,7 +68,6 @@ namespace nonogram
             Graphics g = e.Graphics;
             this.BackColor = Color.White;
 
-            //верхний блок
             x_start = x0 + col_left * size_block + line_big_block; y_start = y0;
             g.DrawRectangle(black, x_start, y_start, col * size_block + line_big_block, row_up * size_block + line_big_block);
             for (int i = 0; i < col; i++)
@@ -77,7 +80,6 @@ namespace nonogram
                         DrawString(x, y, up[i][up[i].Length - (row_up - j - 1) - 1]);
                 }
 
-            //левый блок
             x_start = x0; y_start = y0 + row_up * size_block + line_big_block;
             g.DrawRectangle(black, x_start, y_start, size_block * col_left + line_big_block, size_block * row + line_big_block);
             for (int i = 0; i < row; i++)
@@ -90,7 +92,6 @@ namespace nonogram
                         DrawString(x, y, left[i][left[i].Length - (col_left - j - 1) - 1]);
                 }
 
-            //игровое поле
             x_start = x0 + col_left * size_block + line_big_block; y_start = y0 + row_up * size_block + line_big_block;
             g.DrawRectangle(black, x_start, y_start, size_block * col + line_big_block, size_block * row + line_big_block);
             for (int i = 0; i < row; i++)
@@ -118,7 +119,6 @@ namespace nonogram
                     int y1 = y_start + size_block * i + 1;
                     g.DrawLine(black, x1, y1, x2 + 1, y1);
                 }
-
         } 
 
         private void Form2_MouseDown(object sender, MouseEventArgs e)
@@ -143,7 +143,6 @@ namespace nonogram
 
         private void Form2_MouseMove_1(object sender, MouseEventArgs e)
         {
-            //if (flag_move_mouse)
                 x_y_mouse(e);
         }
 
@@ -224,7 +223,6 @@ namespace nonogram
                 {
                     if (answer[row_time, col_mouse] == mode)
                         redraw(row_time, col_mouse, act);
-                    
                 }
             }
         } 
@@ -289,8 +287,6 @@ namespace nonogram
             left = new int[row][];
             up = new int[col][];
             List<int> temporary = new List<int> { };
-
-            //массив левого блока
             for (int i = 0; i < row; i++)
             {
                 count = 0;
@@ -465,7 +461,6 @@ namespace nonogram
                     }
                 }
             }
-
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
@@ -488,7 +483,6 @@ namespace nonogram
             }
             catch
             {
-
             }
         }
 
@@ -508,7 +502,6 @@ namespace nonogram
             {
                 return false;
             }
-            
         }
         
         private void SQL_Settinge_SET()
@@ -524,7 +517,6 @@ namespace nonogram
             }
             catch
             {
-
             }
         }
         #endregion

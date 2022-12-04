@@ -18,28 +18,27 @@ namespace nonogram
         {
             "Легкий", "Средний"
         };
-        #endregion                                                                                             //блок переменных
+        #endregion                                                                                             
 
         public Form1()
         {
             InitializeComponent();
-            domainUpDown1.Items.AddRange(difficult_RU);                                                        //наполнение DomainUpDown
-            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult"));                          //отображение уровня сложности
-            numericUpDown1.Maximum = SQL_Count();                                                              //ограничение максимального кол-ва уровней
-            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex])); //отображение уровня сложности
+            domainUpDown1.Items.AddRange(difficult_RU);                                                        
+            domainUpDown1.SelectedIndex = Convert.ToInt32(SQL_GET("Last_Difficult"));                          
+            numericUpDown1.Maximum = SQL_Count();                                                              
+            numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex])); 
             Check_Label();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             SQL_Levels();
-
             Form2 form2 = new Form2(this, row, col, patern, Convert.ToInt32(numericUpDown1.Value), difficult[domainUpDown1.SelectedIndex]);
-            form2.Show();                                                                                      // отображение form2
-            this.Visible = false;                                                                              // отключение видимости form1
+            form2.Show();                                                                                     
+            this.Visible = false;                                                                              
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)                                                      // событие нажатия кнопок на клавиатуре
+        protected override void OnKeyDown(KeyEventArgs e)                                                      
         {
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Z && e.Alt)
@@ -51,32 +50,27 @@ namespace nonogram
             }
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)                                   //событие изменения значения numericUpDown1
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)                                   
         {
-                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             SQL_SET();
             Check_Label();
         }
 
-        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)                             //событие изменения значения domainUpDown1
+        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)                             
         {
-                                                                                                               //SQL_SET();
             numericUpDown1.Maximum = SQL_Count();
             numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));
-                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
-        private void Form1_Activated(object sender, EventArgs e)                                               //событие активации form1
+        private void Form1_Activated(object sender, EventArgs e)                                               
         {
-                                                                                                               //number_level = Convert.ToInt32(numericUpDown1.Value);
             Check_Label();
         }
 
-        private void Check_Label()                                                                             // событие отображение информации в label1 с проверкой
+        private void Check_Label()                                                                             
         {
-
-            if (SQL_Passed(difficult[domainUpDown1.SelectedIndex], number_level))
+            if (SQL_Passed(difficult[domainUpDown1.SelectedIndex], Convert.ToInt32(numericUpDown1.Value)))
             {
                 label2.Text = "✓";
                 label2.ForeColor = Color.Green;
@@ -88,7 +82,7 @@ namespace nonogram
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)                                  //событие закрытия form1
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)                                 
         {
             SQL_SET();
         }
@@ -105,14 +99,13 @@ namespace nonogram
                     SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM " + difficult[domainUpDown1.SelectedIndex] + " WHERE Number_Level = " + number_level, connection);
                     using (var reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())                                                                  // построчно считываем данные
+                        while (reader.Read())                                                                  
                         {
                             var s = reader.GetValue(1);
                             row = reader.GetInt32(2);
                             col = reader.GetInt32(3);
                             patern = new int[row, col];
                             string[] words = s.ToString().Split(';');
-
                             for (int i = 0; i < row; i++)
                             {
                                 string[] symbols = words[i].Split(',');
@@ -202,7 +195,7 @@ namespace nonogram
 
             }
         }
-        #endregion                                                                                             // блок SQL запросов для БД
+        #endregion
 
     }
 }
