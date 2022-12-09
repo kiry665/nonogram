@@ -29,7 +29,6 @@ namespace nonogram
             numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex])); 
             Check_Label();
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             SQL_Levels();
@@ -37,7 +36,6 @@ namespace nonogram
             form2.Show();                                                                                     
             this.Visible = false;                                                                              
         }
-
         protected override void OnKeyDown(KeyEventArgs e)                                                      
         {
             base.OnKeyDown(e);
@@ -49,25 +47,21 @@ namespace nonogram
                 e.Handled = true;
             }
         }
-
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)                                   
         {
             SQL_SET();
             Check_Label();
         }
-
         private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)                             
         {
             numericUpDown1.Maximum = SQL_Count();
             numericUpDown1.Value = Convert.ToInt32(SQL_GET("Last_" + difficult[domainUpDown1.SelectedIndex]));
             Check_Label();
         }
-
         private void Form1_Activated(object sender, EventArgs e)                                               
         {
             Check_Label();
         }
-
         private void Check_Label()                                                                             
         {
             if (SQL_Passed(difficult[domainUpDown1.SelectedIndex], Convert.ToInt32(numericUpDown1.Value)))
@@ -81,7 +75,6 @@ namespace nonogram
                 label2.ForeColor = Color.Red;
             }
         }
-
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)                                 
         {
             SQL_SET();
@@ -158,7 +151,6 @@ namespace nonogram
                 return false;
             }
         }
-
         private object SQL_GET(string cell)
         {
             try
@@ -176,7 +168,6 @@ namespace nonogram
                 return "";
             }
         }
-
         private void SQL_SET()
         {
             try

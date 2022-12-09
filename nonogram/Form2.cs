@@ -15,7 +15,7 @@ namespace nonogram
     {
         #region Переменные
         Form form1 = new Form1();
-        const int x0 = 10, y0 = 10, line_big_block = 2, line_small_block = 1;
+        const int x0 = 10, y0 = 15, line_big_block = 2, line_small_block = 1;
         bool flag, flag_move_mouse, flag_H = false, flag_V = false, color = true;
         int col, row, max_left, max_up, row_up, col_left, mode, act, number_level, size_block = 40;
         int x_start, y_start, col_time = 0, row_time = 0;
@@ -29,6 +29,7 @@ namespace nonogram
         SolidBrush light_blue = new SolidBrush(Color.FromArgb(255, 52, 72, 97));
         SolidBrush white = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
         #endregion
+
         public Form2(Form1 f1, int row, int col, int[,] nonogram, int number_level, string difficult)
         {
             if(difficult == "Easy")
@@ -49,11 +50,10 @@ namespace nonogram
             switch1.Checked = SQL_Settings_GET();
             button1.Size = new Size(50, 50);
             switch1.Size = new Size(50, 20);
-            button1.Location = new Point(x0, y0);
-            switch1.Location = new Point(x0, y0 + 54);
+            //button1.Location = new Point(x0, y0);
+            //switch1.Location = new Point(x0, y0 + 54);
             this.difficult = difficult;
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             color = !color;
@@ -62,7 +62,6 @@ namespace nonogram
             else
                 button1.BackColor = Color.White;
         }
-
         private void Form2_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -91,7 +90,7 @@ namespace nonogram
                     if (col_left - j - 1 < left[i].Length)
                         DrawString(x, y, left[i][left[i].Length - (col_left - j - 1) - 1]);
                 }
-
+            
             x_start = x0 + col_left * size_block + line_big_block; y_start = y0 + row_up * size_block + line_big_block;
             g.DrawRectangle(black, x_start, y_start, size_block * col + line_big_block, size_block * row + line_big_block);
             for (int i = 0; i < row; i++)
@@ -120,7 +119,6 @@ namespace nonogram
                     g.DrawLine(black, x1, y1, x2 + 1, y1);
                 }
         } 
-
         private void Form2_MouseDown(object sender, MouseEventArgs e)
         {
             if((e.Button == MouseButtons.Middle) || (e.Button == MouseButtons.Right))
@@ -140,12 +138,10 @@ namespace nonogram
                 x_y_mouse(e);
             }
         }
-
         private void Form2_MouseMove_1(object sender, MouseEventArgs e)
         {
                 x_y_mouse(e);
         }
-
         private void x_y_mouse(MouseEventArgs e)
         {
             if ((e.Button == MouseButtons.Left) && (flag))
@@ -226,37 +222,34 @@ namespace nonogram
                 }
             }
         } 
-
         private void redraw(int row_r, int col_r, int act)
         {
             Graphics g = CreateGraphics();
             int x = x_start + size_block * col_r;
             int y = y_start + size_block * row_r;
 
-            if (act == 0)
+            switch (act)
             {
-                g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
-                g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
-                answer[row_r, col_r] = act;
+                case 0:
+                    g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
+                    g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
+                    answer[row_r, col_r] = act;
+                    break;
+                case 1:
+                    g.FillRectangle(light_blue, x + 1, y + 1, size_block - 1, size_block - 1);
+                    g.DrawRectangle(blue, x + 1, y + 1, size_block - 1, size_block - 1);
+                    answer[row_r, col_r] = act;
+                    break;
+                case 2:
+                    g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
+                    g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
+                    g.DrawLine(light_blue_pen, x + 10, y + 10, x + size_block - 10, y + size_block - 10);
+                    g.DrawLine(light_blue_pen, x + 10, y + size_block - 10, x + size_block - 10, y + 10);
+                    answer[row_r, col_r] = act;
+                    break;
             }
 
-            if (act == 1)
-            {
-                g.FillRectangle(light_blue, x + 1, y + 1, size_block - 1, size_block - 1);
-                g.DrawRectangle(blue, x + 1, y + 1, size_block - 1, size_block - 1);
-                answer[row_r, col_r] = act;
-            }
-
-            if (act == 2)
-            {
-                g.FillRectangle(white, x + 1, y + 1, size_block - 1, size_block - 1);
-                g.DrawRectangle(gray, x + 1, y + 1, size_block - 1, size_block - 1);
-                g.DrawLine(light_blue_pen, x + 10, y + 10, x + size_block - 10, y + size_block - 10);
-                g.DrawLine(light_blue_pen, x + 10, y + size_block - 10, x + size_block - 10, y + 10);
-                answer[row_r, col_r] = act;
-            }
-
-            for (int i = 1; i < col; i++) //жирные вертикальные линии
+            for (int i = 1; i < col; i++)
                 if (i % 5 == 0)
                 {
                     int x1 = x_start + size_block * i + 1;
@@ -265,7 +258,7 @@ namespace nonogram
                     g.DrawLine(black, x1, y1, x1, y2 + 1);
                 }
 
-            for (int i = 1; i < row; i++) //жирные горизонтальные линии
+            for (int i = 1; i < row; i++)
                 if (i % 5 == 0)
                 {
                     int x1 = x0;
@@ -280,7 +273,6 @@ namespace nonogram
             }
             check(answer, row_r, col_r);
         }
-
         private void counter(int[,] patern)
         {
             int count;
@@ -336,7 +328,6 @@ namespace nonogram
             }
             row_up = max_up;
         }
-
         private void DrawString(int x, int y, int number)
         {
             string drawString = number.ToString();
@@ -349,7 +340,6 @@ namespace nonogram
             StringFormat drawFormat = new StringFormat();
             formGraphics.DrawString(drawString, drawFont, drawBrush, x + coef_x, y + coef_y, drawFormat);
         }
-
         private void check(int[,] patern, int row, int col)
         {
             bool check = true;
@@ -383,7 +373,6 @@ namespace nonogram
             }
                 
         }
-
         private void cross(int[,] patern, int row, int col)
         {
             List<int> temporary = new List<int> { };
@@ -462,7 +451,6 @@ namespace nonogram
                 }
             }
         }
-
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             form1.Visible = true;
@@ -485,7 +473,6 @@ namespace nonogram
             {
             }
         }
-
         private bool SQL_Settings_GET()
         {
             try
@@ -503,7 +490,6 @@ namespace nonogram
                 return false;
             }
         }
-        
         private void SQL_Settinge_SET()
         {
             try
